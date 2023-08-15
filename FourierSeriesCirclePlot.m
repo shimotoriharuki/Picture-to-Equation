@@ -1,5 +1,5 @@
 clear
-% clf
+clf
 % 時刻tで変化する任意のデータ
 data = load('cat_data.mat');
 data.size = length(data.position);
@@ -35,16 +35,18 @@ resolution = 0.5;
 qc = [];
 ql = [];
 circle_num = 1000;
-for r = 0 : 0.01 : 0
+for r = 0 : 0.1 : 1
     center = [0, 0];
     centers = zeros(circle_num, 2);
+    next_centers = zeros(circle_num, 2);
     radiuses = zeros(1, circle_num);
     clf
+    h = animatedline;
     for n = 1:circle_num
         centers(n, :) = center;
         radiuses(n) = animation.amp.x(n);
         % plotCircle(center, animation.amp.x(n));
-        hold on
+        % hold on
 
         next_x = center(1) + animation.amp.x(n) * cos(r + animation.phase.x(n));
         next_y = center(2) + animation.amp.x(n) * sin(r + animation.phase.x(n));
@@ -52,12 +54,24 @@ for r = 0 : 0.01 : 0
         % plotLine(center, next_center);
     
         center = next_center;
+        next_centers(n, :) = next_center;
+
         
         
     end
-    plotCircle(centers, radiuses);
+
+    hold on
+    for i = 1:size(centers, 2)
+        addpoints(h, [centers(n, 1), next_centers(n, 1)], [centers(n, 2), next_centers(n, 2)]);
+        drawnow
+    end
+    % plotCircle(centers, radiuses);
+    % plotLine(centers', next_centers');
 
     axis equal
+
+    % drawnow
+
     hold off
 
 end
@@ -70,5 +84,7 @@ function plotCircle(centers, radiuses)
 end
 
 function plotLine(start, stop)
-    plot([start(1), stop(1)], [start(2), stop(2)]);
+    line([start(1, :); stop(1, :)], [start(2, :); stop(2, :)]);
+
+    % plot([start(1), stop(1)], [start(2), stop(2)]);
 end
