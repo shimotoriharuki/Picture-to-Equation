@@ -1,10 +1,10 @@
 clear
 % 時刻tで変化する任意のデータ
 data = load('cat_data.mat');
-data.size = length(data.cat_data);
+data.size = length(data.position);
 
-picture.position.x = data.cat_data(1, 1:5); 
-picture.position.y = data.cat_data(2, 1:5); 
+picture.position.x = data.position(1, 1:5); 
+picture.position.y = data.position(2, 1:5); 
 
 % フーリエ変換
 equation.F.x = fft(picture.position.x);
@@ -29,13 +29,6 @@ for k = 1:N
 end
 equation.position.x = real(equation.position.x/N);
 equation.position.y = real(equation.position.y/N);
-
-%関数にして座標を計算
-% soiya.t = 0:0.1:N-1;
-% soiya.x = zeros(1, length(soiya.t));
-% soiya.y = zeros(1, length(soiya.t));
-fx_fft = ifft(equation.F.x);
-fx_self = (1/)
 
 figure(1)
 subplot(2, 1, 1)
@@ -62,12 +55,12 @@ hold off
 legend("Picture position", "Equation position")
 
 % TeX形式の数式を出力
-equation.tex_string.x = '';
-for k = 1:N
-    if k == 1
-        equation.tex_string.x = [equation.tex_string.x, num2str(real(equation.F.x(k))/N)];
-    else
-        equation.tex_string.x = [equation.tex_string.x, ' + ', num2str(real(equation.F.x(k))/N), 'e^{', num2str(2*pi*1i*(k-1)), 't}'];
-    end
-end
-disp(equation.tex_string.x)
+% equation.tex_string.x = '';
+% for k = 1:N
+%     if k == 1
+%         equation.tex_string.x = [equation.tex_string.x, num2str(real(equation.F.x(k))/N)];
+%     else
+%         equation.tex_string.x = [equation.tex_string.x, ' + ', num2str(real(equation.F.x(k))/N), 'e^{', num2str(2*pi*1i*(k-1)), 't}'];
+%     end
+% end
+% disp(equation.tex_string.x)

@@ -38,5 +38,5 @@ yy = spline(t,y,tt);
 plot(xx,yy)
 axis equal
 
-cat_data = [xx; yy];
-save('cat_data', 'cat_data')
+position = [xx; yy];
+save('cat_data', 'position')
