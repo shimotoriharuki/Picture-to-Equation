@@ -1,7 +1,11 @@
 clear
 clf
 % 時刻tで変化する任意のデータ
-data = load('cat_data.mat');
+% data = load('cat_data.mat');
+% data.size = length(data.position);
+tt = 0 : 0.001 : 2*pi;
+data.position(1, :) = sin(tt);
+data.position(2, :) = 2*sin(2*tt + pi/6);
 data.size = length(data.position);
 
 picture.position.x = data.position(1, :); 
@@ -13,15 +17,13 @@ equation.F.y = fft(picture.position.y) / length(picture.position.y);
 
 % パラメータ
 N = length(equation.F.x);
-frequencies = [0:N/2-1, -N/2:-1];
-time = linspace(0, 2*pi, N+1);
 
 % 直径，周波数，初期位相を計算
 animation.amp.x = abs(equation.F.x);
 animation.amp.y = abs(equation.F.y);
 
-animation.freq.x = 1:N;
-animation.freq.y = 1:N;
+animation.freq.x = 0:N;
+animation.freq.y = 0:N;
 
 animation.phase.x = atan2(imag(equation.F.x), real(equation.F.x));
 animation.phase.y = atan2(imag(equation.F.y), real(equation.F.y));
@@ -40,7 +42,7 @@ figure(1)
 
 circle_num = length(equation.F.x);
 frames = length(equation.F.x);
-frame_interval = 5;
+frame_interval = 20;
 xs = zeros(1, frames);
 ys = zeros(1, frames);
 for f = 0 :frame_interval : frames
@@ -67,7 +69,7 @@ for f = 0 :frame_interval : frames
         %y
         animation.centers.y(n, :) = animation.center.y;
         animation.radiuses.y(n) = animation.amp.y(n);
-        animation.theta.y = 2*pi*animation.freq.y(n)*f/frames + animation.phase.y(n) + pi/2;
+        animation.theta.y = 2*pi*animation.freq.y(n)*f/frames + animation.phase.y(n) - pi/2;
         
         %x
         animation.next_center.x = [animation.center.x(1) + animation.amp.x(n) * cos(animation.theta.x), 

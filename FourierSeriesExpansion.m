@@ -1,13 +1,13 @@
 clear
 
 % Define a picture
-data = load('cat_data.mat');
-data.size = length(data.position);
-
-% tt = 0 : 0.1 : 2*pi;
-% data.position(1, :) = sin(tt);
-% data.position(2, :) = 2*sin(2*tt + pi/6);
+% data = load('cat_data.mat');
 % data.size = length(data.position);
+
+tt = 0 : 0.1 : 2*pi;
+data.position(1, :) = sin(tt);
+data.position(2, :) = 2*sin(2*tt + pi/6);
+data.size = length(data.position);
 
 
 t = linspace(0, 1, data.size);
@@ -15,7 +15,7 @@ picture.position.x = data.position(1, :);
 picture.position.y = data.position(2, :);
 
 
-N = 100; % number of terms to expand
+N = 10; % number of terms to expand
 T = t(end)-t(1);
 w0 = 2*pi/T;
 
@@ -64,9 +64,9 @@ in = 0:0.0001:1;
 eval(string_save_x); % Run a script with a string of variable.
 eval(string_save_y); % Run a script with a string of variable.
 
-hold on
-scatter(out.x, out.y, "x");
-hold off
+% hold on
+% scatter(out.x, out.y, "x");
+% hold off
 
 
 % Calculate the coefficients when expanding the Fourier series

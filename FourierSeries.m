@@ -1,6 +1,11 @@
 clear
 % 時刻tで変化する任意のデータ
-data = load('cat_data.mat');
+% data = load('cat_data.mat');
+% data.size = length(data.position);
+
+tt = 0 : 0.1 : 2*pi;
+data.position(1, :) = sin(tt);
+data.position(2, :) = 2*sin(2*tt + pi/6);
 data.size = length(data.position);
 
 picture.position.x = data.position(1, 1:data.size); 
