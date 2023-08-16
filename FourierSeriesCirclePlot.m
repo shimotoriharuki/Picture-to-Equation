@@ -1,7 +1,7 @@
 clear
 clf
 % 時刻tで変化する任意のデータ
-data = load('uneune.mat');
+data = load('cat_data.mat');
 data.size = length(data.position);
 
 % リサージュ
@@ -41,12 +41,14 @@ animation.freq.y = animation.freq.y(idx);
 
 % アニメーション
 figure(1)
-
 circle_num = length(equation.F.x);
 frames = length(equation.F.x);
 frame_interval = 1;
 xs = zeros(1, frames);
 ys = zeros(1, frames);
+
+M(frames) = struct('cdata',[],'colormap',[]);
+
 for f = 0 :frame_interval : frames
     %x
     animation.center.x = [0.5, 0.5];
@@ -104,11 +106,13 @@ for f = 0 :frame_interval : frames
 
     xs(f+1) = animation.centers.x(end, 1);
     ys(f+1) = animation.centers.y(end, 2);
+    M(f+1) = getframe;
 
 end
 
 hold on 
 scatter(xs, ys);
+M(end+1) = getframe;
 hold off
 
 
