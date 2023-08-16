@@ -8,8 +8,8 @@ picture.position.x = data.position(1, :);
 picture.position.y = data.position(2, :); 
 
 % フーリエ変換
-equation.F.x = fft(picture.position.x);
-equation.F.y = fft(picture.position.y);
+equation.F.x = fft(picture.position.x) / length(picture.position.x);
+equation.F.y = fft(picture.position.y) / length(picture.position.y);
 
 % パラメータ
 N = length(equation.F.x);
@@ -28,46 +28,69 @@ animation.phase.y = atan2(imag(equation.F.y), real(equation.F.y));
 [animation.amp.x, idx] = sort(animation.amp.x, "descend");
 animation.phase.x = animation.phase.x(idx);
 
+[animation.amp.y, idx] = sort(animation.amp.y, "descend");
+animation.phase.y = animation.phase.y(idx);
+
 % アニメーション
 figure(1)
 
-resolution = 0.5;
-qc = [];
-ql = [];
-circle_num = 1000;
-for r = 0 : 0.01 : 1
-    center = [0, 0];
-    centers = zeros(circle_num, 2);
-    next_centers = zeros(circle_num, 2);
-    radiuses = zeros(1, circle_num);
+circle_num = length(equation.F.x);
+frames = length(equation.F.x);
+frame_interval = 10;
+xs
+for f = 0 :frame_interval : frames
+    %x
+    animation.center.x = [0, 0];
+    animation.centers.x = zeros(circle_num, 2);
+    animation.next_centers.x = zeros(circle_num, 2);
+    animation.radiuses.x = zeros(1, circle_num);
+
+    animation.theta.x = 0;
+    %y
+    animation.center.y = [0, 0];
+    animation.centers.y = zeros(circle_num, 2);
+    animation.next_centers.y = zeros(circle_num, 2);
+    animation.radiuses.y = zeros(1, circle_num);
+
+    animation.theta.y = 0;
     clf
-    h = animatedline;
     for n = 1:circle_num
-        centers(n, :) = center;
-        radiuses(n) = animation.amp.x(n);
-        % plotCircle(center, animation.amp.x(n));
-        % hold on
-
-        next_x = center(1) + animation.amp.x(n) * cos(r + animation.phase.x(n));
-        next_y = center(2) + animation.amp.x(n) * sin(r + animation.phase.x(n));
-        next_center = [next_x, next_y];
-        % plotLine(center, next_center);
-        addpoints(h, [centers(1, n), e(1, n)], [centers(2, n), e(2, n)]);
-    
-        center = next_center;
-        next_centers(n, :) = next_center;
-
+        %x
+        animation.centers.x(n, :) = animation.center.x;
+        animation.radiuses.x(n) = animation.amp.x(n);
+        animation.theta.x = 2*pi*animation.freq(n)*f/frames + animation.phase.x(n);
+        %y
+        animation.centers.y(n, :) = animation.center.y;
+        animation.radiuses.y(n) = animation.amp.y(n);
+        animation.theta.y = 2*pi*animation.freq(n)*f/frames + animation.phase.y(n);
         
+        %x
+        animation.next_center.x = [animation.center.x(1) + animation.amp.x(n) * cos(animation.theta.x), 
+            animation.center.x(2) + animation.amp.x(n) * sin(animation.theta.x)];
+        %y
+        animation.next_center.y = [animation.center.y(1) + animation.amp.y(n) * cos(animation.theta.y), 
+            animation.center.y(2) + animation.amp.y(n) * sin(animation.theta.y)];
+
+        %x
+        animation.center.x = animation.next_center.x;
+        animation.next_centers.x(n, :) = animation.next_center.x;
+        %y
+        animation.center.y = animation.next_center.y;
+        animation.next_centers.y(n, :) = animation.next_center.y;
         
     end
-    hold on
-    plotCircle(centers, radiuses);
-    plotLine(centers', next_centers');
 
+    hold on
+    subplot(2, 1, 1)
+    plotCircle(animation.centers.x, animation.radiuses.x);
+    axis equal
+
+    subplot(2, 1, 2)
+    plotCircle(animation.centers.y, animation.radiuses.y);
+    % plotLine(centers', next_centers');
     axis equal
 
     drawnow
-
     hold off
 
 end
