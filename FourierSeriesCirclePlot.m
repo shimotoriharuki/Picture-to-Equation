@@ -20,23 +20,27 @@ time = linspace(0, 2*pi, N+1);
 animation.amp.x = abs(equation.F.x);
 animation.amp.y = abs(equation.F.y);
 
-animation.freq = 1:N;
+animation.freq.x = 1:N;
+animation.freq.y = 1:N;
 
 animation.phase.x = atan2(imag(equation.F.x), real(equation.F.x));
 animation.phase.y = atan2(imag(equation.F.y), real(equation.F.y));
 
 [animation.amp.x, idx] = sort(animation.amp.x, "descend");
 animation.phase.x = animation.phase.x(idx);
+animation.freq.x = animation.freq.x(idx);
 
 [animation.amp.y, idx] = sort(animation.amp.y, "descend");
 animation.phase.y = animation.phase.y(idx);
+animation.freq.y = animation.freq.y(idx);
+
 
 % アニメーション
 figure(1)
 
 circle_num = length(equation.F.x);
 frames = length(equation.F.x);
-frame_interval = 10;
+frame_interval = 5;
 xs = zeros(1, frames);
 ys = zeros(1, frames);
 for f = 0 :frame_interval : frames
@@ -59,11 +63,11 @@ for f = 0 :frame_interval : frames
         %x
         animation.centers.x(n, :) = animation.center.x;
         animation.radiuses.x(n) = animation.amp.x(n);
-        animation.theta.x = 2*pi*animation.freq(n)*f/frames + animation.phase.x(n);
+        animation.theta.x = 2*pi*animation.freq.x(n)*f/frames + animation.phase.x(n);
         %y
         animation.centers.y(n, :) = animation.center.y;
         animation.radiuses.y(n) = animation.amp.y(n);
-        animation.theta.y = 2*pi*animation.freq(n)*f/frames + animation.phase.y(n) + pi/2;
+        animation.theta.y = 2*pi*animation.freq.y(n)*f/frames + animation.phase.y(n) + pi/2;
         
         %x
         animation.next_center.x = [animation.center.x(1) + animation.amp.x(n) * cos(animation.theta.x), 
