@@ -14,7 +14,8 @@ t = linspace(0, 1, data.size);
 picture.position.x = data.position(1, :);
 picture.position.y = data.position(2, :);
 
-N = 1000; % number of terms to expand
+
+N = 100; % number of terms to expand
 T = t(end)-t(1);
 w0 = 2*pi/T;
 

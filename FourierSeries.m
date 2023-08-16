@@ -3,8 +3,8 @@ clear
 data = load('cat_data.mat');
 data.size = length(data.position);
 
-picture.position.x = data.position(1, 1:5); 
-picture.position.y = data.position(2, 1:5); 
+picture.position.x = data.position(1, 1:data.size); 
+picture.position.y = data.position(2, 1:data.size); 
 
 % フーリエ変換
 equation.F.x = fft(picture.position.x);
