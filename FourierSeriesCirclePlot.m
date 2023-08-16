@@ -35,7 +35,7 @@ resolution = 0.5;
 qc = [];
 ql = [];
 circle_num = 1000;
-for r = 0 : 0.1 : 1
+for r = 0 : 0.01 : 1
     center = [0, 0];
     centers = zeros(circle_num, 2);
     next_centers = zeros(circle_num, 2);
@@ -45,14 +45,11 @@ for r = 0 : 0.1 : 1
     for n = 1:circle_num
         centers(n, :) = center;
         radiuses(n) = animation.amp.x(n);
-        % plotCircle(center, animation.amp.x(n));
-        % hold on
 
         next_x = center(1) + animation.amp.x(n) * cos(r + animation.phase.x(n));
         next_y = center(2) + animation.amp.x(n) * sin(r + animation.phase.x(n));
         next_center = [next_x, next_y];
-        % plotLine(center, next_center);
-    
+
         center = next_center;
         next_centers(n, :) = next_center;
 
@@ -61,16 +58,12 @@ for r = 0 : 0.1 : 1
     end
 
     hold on
-    for i = 1:size(centers, 2)
-        addpoints(h, [centers(n, 1), next_centers(n, 1)], [centers(n, 2), next_centers(n, 2)]);
-        drawnow
-    end
-    % plotCircle(centers, radiuses);
+    plotCircle(centers, radiuses);
     % plotLine(centers', next_centers');
 
     axis equal
 
-    % drawnow
+    drawnow
 
     hold off
 

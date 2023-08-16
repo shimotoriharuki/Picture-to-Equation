@@ -48,28 +48,67 @@
 % 
 %     % frames(i) = getframe(fig); % 図を画像データとして得る
 % end
-clf
-clear
-numpoints = 100; 
-x = linspace(0, 4*pi, numpoints); 
-y = sin(x); 
-pc = [-.1, -.1, .2, .2] ; % position of circle
-f = figure(1);
-h = animatedline;
-hc = zeros(1, 1000);
-M(numpoints) = struct('cdata',[],'colormap',[]);
-for i = 1 : length(hc)
-    hc(i) = rectangle('Position', [x(1)+i*0.01 y(1) 0 0] + pc,'Curvature',[1 1]) ; % draw circle
-end
-axis([-pi, 5*pi, -1.5, 1.5]) 
-for k = 1 : numpoints 
-    addpoints(h, x(k), y(k)) 
-    for i = 1 : length(hc)
-        set(hc(i), 'Position', [x(k)+i*0.01 y(k) 0 0] + pc) ; % adjust position of circle
-    end
-    if rem(i, 20) == 0
-        % drawnow limitrate 
-    end
+% clf
+% clear
+% numpoints = 500; 
+% x = linspace(0, 4*pi, numpoints); 
+% y = sin(x); 
+% pc = [-.1, -.1, .2, .2] ; % position of circle
+% f = figure(1);
+% % h = animatedline;
+% hc = gobjects(500, 1);
+% M(numpoints) = struct('cdata',[],'colormap',[]);
+% for i = 1 : length(hc)
+%     hc(i) = rectangle('Position', [x(1)+i*0.01 y(1) 0 0] + pc,'Curvature',[1 1]) ; % draw circle
+% end
+% axis([-pi, 5*pi, -1.5, 1.5]) 
+% for k = 1 : numpoints 
+%     % addpoints(h, x(k), y(k)) 
+%     for i = 1 : length(hc)
+%         set(hc(i), 'Position', [x(k)+i*0.01 y(k) 0 0] + pc) ; % adjust position of circle
+%     end
+%     if rem(i, 2) == 0
+%         drawnow limitrate 
+%     end
+% 
+%     M(k) = getframe;
+% end 
 
-    M(k) = getframe;
-end 
+N = 1000; % 円の数
+
+
+% % 円を描画
+% figure(1)
+% for i = 1 : 10
+%     clf
+%     % centers = rand(N,2)*10; % 円の中心の座標
+%     % radii = rand(N,1)*2; % 円の半径
+%     % viscircles(centers, radii);
+% 
+%     drawnow
+% 
+% end
+% % 画像を保存
+% saveas(gcf, 'circles.png')
+
+figure(1)
+N = 1000; % 線の数
+
+for j = 1:10
+x1 = rand(N,1)*10; % 線の始点のx座標
+y1 = rand(N,1)*10; % 線の始点のy座標
+x2 = rand(N,1)*10; % 線の終点のx座標
+y2 = rand(N,1)*10; % 線の終点のy座標
+
+% 線を描画
+
+clf
+hold on
+for i = 1:N
+    
+    plot([x1(i) x2(i)], [y1(i) y2(i)])
+    
+end
+drawnow
+hold off
+end
