@@ -1,12 +1,14 @@
 clear
 clf
 % 時刻tで変化する任意のデータ
-% data = load('cat_data.mat');
-% data.size = length(data.position);
-tt = 0 : 0.001 : 2*pi;
-data.position(1, :) = sin(tt);
-data.position(2, :) = 2*sin(2*tt + pi/6);
+data = load('uneune.mat');
 data.size = length(data.position);
+
+% リサージュ
+% tt = 0 : 0.001 : 2*pi;
+% data.position(1, :) = sin(tt);
+% data.position(2, :) = 2*sin(2*tt + pi/6);
+% data.size = length(data.position);
 
 picture.position.x = data.position(1, :); 
 picture.position.y = data.position(2, :); 
@@ -42,7 +44,7 @@ figure(1)
 
 circle_num = length(equation.F.x);
 frames = length(equation.F.x);
-frame_interval = 20;
+frame_interval = 1;
 xs = zeros(1, frames);
 ys = zeros(1, frames);
 for f = 0 :frame_interval : frames
@@ -94,8 +96,8 @@ for f = 0 :frame_interval : frames
     plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'm')
     plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'm')
     axis equal
-    xlim([-1 1])
-    ylim([-1 1])
+    xlim([-3 3])
+    ylim([-3 3])
 
     drawnow
     hold off
