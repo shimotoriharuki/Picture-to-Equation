@@ -37,7 +37,8 @@ figure(1)
 circle_num = length(equation.F.x);
 frames = length(equation.F.x);
 frame_interval = 10;
-xs
+xs = zeros(1, frames);
+ys = zeros(1, frames);
 for f = 0 :frame_interval : frames
     %x
     animation.center.x = [0, 0];
@@ -62,7 +63,7 @@ for f = 0 :frame_interval : frames
         %y
         animation.centers.y(n, :) = animation.center.y;
         animation.radiuses.y(n) = animation.amp.y(n);
-        animation.theta.y = 2*pi*animation.freq(n)*f/frames + animation.phase.y(n);
+        animation.theta.y = 2*pi*animation.freq(n)*f/frames + animation.phase.y(n) + pi/2;
         
         %x
         animation.next_center.x = [animation.center.x(1) + animation.amp.x(n) * cos(animation.theta.x), 
@@ -81,29 +82,34 @@ for f = 0 :frame_interval : frames
     end
 
     hold on
-    subplot(2, 1, 1)
-    plotCircle(animation.centers.x, animation.radiuses.x);
+    % subplot(2, 1, 1)
+    plotCircle(animation.centers.x, animation.radiuses.x, 'r');
+    plotCircle(animation.centers.y, animation.radiuses.y, 'b');
+    plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'm')
+    plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'm')
     axis equal
-
-    subplot(2, 1, 2)
-    plotCircle(animation.centers.y, animation.radiuses.y);
-    % plotLine(centers', next_centers');
-    axis equal
+    xlim([-0.3 0.3])
+    ylim([-0.3 0.3])
 
     drawnow
     hold off
 
+    xs(f+1) = animation.centers.x(end, 1);
+    ys(f+1) = animation.centers.y(end, 2);
+
 end
 
+hold on 
+scatter (x)
 
 
-function plotCircle(centers, radiuses)
-    viscircles(centers, radiuses);
+function plotCircle(centers, radiuses, color)
+    viscircles(centers, radiuses, 'Color', color);
     % rectangle('Position',[center - radius, radius * 2, radius * 2], 'Curvature', [1, 1]);
 end
 
-function plotLine(start, stop)
-    line([start(1, :); stop(1, :)], [start(2, :); stop(2, :)]);
+function plotLine(start, stop, color)
+    line([start(1, :); stop(1, :)], [start(2, :); stop(2, :)], 'LineWidth', 5, 'Color', color);
 
     % plot([start(1), stop(1)], [start(2), stop(2)]);
 end
