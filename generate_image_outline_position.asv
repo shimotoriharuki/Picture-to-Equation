@@ -1,0 +1,98 @@
+clear
+clf
+% 画像をインポート
+I = imread('image/THE NOM FACE.jpg');
+
+% 画像をグレースケールに変換
+I = rgb2gray(I);
+
+% 画像を二値化
+BW = imbinarize(I);
+
+figure(1)
+imshow(BW)
+
+% 黒いピクセルの外形の座標を取得
+[B,L,N] = bwboundaries(BW);
+
+% 始点の座標が一番左上から始まるB{n}を検索
+minDistance = inf;
+minIndex = 0;
+for n = 1:N
+    boundary = B{n};
+    distance = boundary(1,1)^2 + boundary(1,2)^2;
+    if distance < minDistance
+        minDistance = distance;
+        minIndex = n;
+    end
+end
+
+% boundary_linkingに代入
+boundary_linking = B{minIndex};
+
+% B{n}の最後の座標から一番近いBを検索して、boundary_linkingに連結
+i = 0;
+while true
+    lastPoint = boundary_linking(end,:);
+    minDistance = inf;
+    minIndex = 0;
+    for n = 1:N
+        if n == minIndex
+            continue;
+        end
+        boundary = B{n};
+        distance = (boundary(1,1) - lastPoint(1))^2 + (boundary(1,2) - lastPoint(2))^2;
+        if distance < minDistance
+            minDistance = distance;
+            minIndex = n;
+        end
+    end
+    if i == N
+        break;
+    end
+    boundary_linking = [boundary_linking; B{minIndex}];
+    i = i + 1;
+end
+
+% % 1~Nの座標を連結してboundary_linkingを作成
+% boundary_linking = [];
+% for i = 1:length(B)
+%     boundary_linking = [boundary_linking; B{i}];
+% end
+
+
+hold on;
+% for k=1:length(B)
+%    boundary = B{k};
+%    if(k > N)
+%      plot(boundary(:,2), boundary(:,1), 'g','LineWidth',2);
+%    else
+%      plot(boundary(:,2), boundary(:,1), 'r','LineWidth',2);
+%    end
+% end
+plot(boundary_linking(:,2), boundary_linking(:,1), 'r','LineWidth',2);
+hold off
+
+position(2, :) = -boundary_linking(:, 1)';
+position(1, :) = boundary_linking(:, 2)';
+
+% xy座標の最小値と最大値を取得
+xmin = min(position(1, :));
+xmax = max(position(1, :));
+ymin = min(position(2, :));
+ymax = max(position(2, :));
+
+% xy座標の範囲を-1~1に正規化
+if (xmax - xmin) > (ymax - ymin)
+    position(1, :) = 2 * (position(1, :) - xmin) / (xmax - xmin) - 1;
+    position(2, :) = 2 * (position(2, :) - ymin) / (xmax - xmin) - 1;
+else
+    position(1, :) = 2 * (position(1, :) - xmin) / (ymax - ymin) - 1;
+    position(2, :) = 2 * (position(2, :) - ymin) / (ymax - ymin) - 1;
+end
+
+position(:, end+1) = [0; 0];
+
+scatter(position(1, :), position(2, :))
+
+save('nom_data', "position")

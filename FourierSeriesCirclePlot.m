@@ -1,8 +1,8 @@
 clear
 clf
 % 時刻tで変化する任意のデータ
-% data = load('cat_data.mat');
-% data.size = length(data.position);
+data = load('nom_data.mat');
+data.size = length(data.position);
 
 % リサージュ
 % tt = 0 : 0.001 : 2*pi;
@@ -15,10 +15,10 @@ clf
 % data.position(2, :) = 2*sin(2*tt + pi/6)+3*sin(5*tt + pi/2);
 % data.size = length(data.position);
 
-tt = 0 : 0.01 : 2*pi;
-data.position(1, :) = tt;
-data.position(2, :) = 2*sin(2*tt + pi/6)+3*sin(5*tt + pi/2);
-data.size = length(data.position);
+% tt = 0 : 0.01 : 2*pi;
+% data.position(1, :) = tt;
+% data.position(2, :) = 2*sin(2*tt + pi/6)+3*sin(5*tt + pi/2);
+% data.size = length(data.position);
 
 picture.position.x = data.position(1, :); 
 picture.position.y = data.position(2, :); 
@@ -55,7 +55,7 @@ hold on
 % scatter(equation.position.x, equation.position.y, "*")
 axis equal
 hold off
-legend("Picture position", "Equation position")
+legend("Picture position")
 % パラメータ
 N = length(equation.F.x);
 
@@ -84,14 +84,14 @@ circle_num = length(equation.F.x);
 % circle_num = 3;
 
 frames = length(equation.F.x);
-frame_interval = 1; % odd
+frame_interval = 10; % odd
 xs = zeros(1, frames/frame_interval);
 ys = zeros(1, frames/frame_interval);
 
 M(frames) = struct('cdata',[],'colormap',[]);
 
-animation.center_offset.x = [5, 5];
-animation.center_offset.y = [-5, -5];
+animation.center_offset.x = [1, 1];
+animation.center_offset.y = [-1, -1];
 
 for f = 0 :frame_interval : frames
     %x
@@ -151,14 +151,14 @@ for f = 0 :frame_interval : frames
     % plotLine(animation.centers.y', animation.next_centers.y', 'black', 2);
 
     axis equal
-    xlim([picture.min.x, picture.max.x] + [animation.center_offset.y(1), animation.center_offset.x(1)] + [-1, 1])
-    ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), animation.center_offset.x(2)] + [-1, 1])
+    xlim([picture.min.x, picture.max.x] + [animation.center_offset.y(1), animation.center_offset.x(1)] + [-0.1, 0.1])
+    ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), animation.center_offset.x(2)] + [-0.1, 0.1])
  
     % if rem(f, 10) == 0
         drawnow limitrate
     % end
     hold off
-    
+
     M(f+1) = getframe;
 end
 
