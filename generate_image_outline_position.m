@@ -1,7 +1,10 @@
 clear
 clf
 % 画像をインポート
-I = imread('image/THE NOM FACE.jpg');
+% I = imread('image/THE NOM FACE.jpg');
+% I = imread('image/reRo.jpg');
+I = imread('image/SH.png');
+
 I = flipud(I);
 
 % 画像をグレースケールに変換
@@ -57,35 +60,38 @@ end
 figure(2)
 plot(boundary_linking(:,2), boundary_linking(:,1), 'r','LineWidth',2);
 
-position(2, :) = boundary_linking(:, 1)';
-position(1, :) = boundary_linking(:, 2)';
+position_raw(2, :) = boundary_linking(:, 1)';
+position_raw(1, :) = boundary_linking(:, 2)';
 
 
 % xy座標の最小値と最大値を取得
-xmin = min(position(1, :));
-xmax = max(position(1, :));
-ymin = min(position(2, :));
-ymax = max(position(2, :));
+xmin = min(position_raw(1, :));
+xmax = max(position_raw(1, :));
+ymin = min(position_raw(2, :));
+ymax = max(position_raw(2, :));
 
 % xy座標の範囲を-1~1に正規化
 if (xmax - xmin) > (ymax - ymin)
-    position(1, :) = 2 * (position(1, :) - xmin) / (xmax - xmin) - 1;
-    position(2, :) = 2 * (position(2, :) - ymin) / (xmax - xmin) - 1;
+    position_raw(1, :) = 2 * (position_raw(1, :) - xmin) / (xmax - xmin) - 1;
+    position_raw(2, :) = 2 * (position_raw(2, :) - ymin) / (xmax - xmin) - 1;
 else
-    position(1, :) = 2 * (position(1, :) - xmin) / (ymax - ymin) - 1;
-    position(2, :) = 2 * (position(2, :) - ymin) / (ymax - ymin) - 1;
+    position_raw(1, :) = 2 * (position_raw(1, :) - xmin) / (ymax - ymin) - 1;
+    position_raw(2, :) = 2 * (position_raw(2, :) - ymin) / (ymax - ymin) - 1;
 end
 
 % 中心の持ってくる
-cx = (min(position(1, :)) + max(position(1, :)))/2;
-cy = (min(position(2, :)) + max(position(2, :)))/2;
+cx = (min(position_raw(1, :)) + max(position_raw(1, :)))/2;
+cy = (min(position_raw(2, :)) + max(position_raw(2, :)))/2;
 
-position(1, :) = position(1, :) - cx;
-position(2, :) = position(2, :) - cy;
+position_raw(1, :) = position_raw(1, :) - cx;
+position_raw(2, :) = position_raw(2, :) - cy;
 
-% position(:, end+1) = [0; 0]; % あとで消す
+position(1, :) = downsample(position_raw(1, :), 10);
+position(2, :) = downsample(position_raw(2, :), 10);
+
+% position_raw(:, end+1) = [0; 0]; % あとで消す
 
 figure(3)
 scatter(position(1, :), position(2, :))
 
-save('nom_data', "position")
+save('sh', "position")
