@@ -60,6 +60,7 @@ plot(boundary_linking(:,2), boundary_linking(:,1), 'r','LineWidth',2);
 position(2, :) = boundary_linking(:, 1)';
 position(1, :) = boundary_linking(:, 2)';
 
+
 % xy座標の最小値と最大値を取得
 xmin = min(position(1, :));
 xmax = max(position(1, :));
@@ -75,7 +76,14 @@ else
     position(2, :) = 2 * (position(2, :) - ymin) / (ymax - ymin) - 1;
 end
 
-position(:, end+1) = [0; 0];
+% 中心の持ってくる
+cx = (min(position(1, :)) + max(position(1, :)))/2;
+cy = (min(position(2, :)) + max(position(2, :)))/2;
+
+position(1, :) = position(1, :) - cx;
+position(2, :) = position(2, :) - cy;
+
+position(:, end+1) = [0; 0]; % あとで消す
 
 figure(3)
 scatter(position(1, :), position(2, :))

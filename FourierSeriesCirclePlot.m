@@ -50,7 +50,7 @@ equation.position.x = real(equation.position.x/N);
 equation.position.y = real(equation.position.y/N);
 
 figure(2)
-scatter(picture.position.x, picture.position.y, "o")
+scatter(picture.position.x, picture.position.y, "o", 'MarkerFaceColor', 'flat')
 hold on
 % scatter(equation.position.x, equation.position.y, "*")
 axis equal
@@ -90,8 +90,8 @@ ys = zeros(1, frames/frame_interval);
 
 M(frames) = struct('cdata',[],'colormap',[]);
 
-animation.center_offset.x = [1, 1];
-animation.center_offset.y = [-1, -1];
+animation.center_offset.x = [0.5, 0.5];
+animation.center_offset.y = [-0.5, -0.5];
 
 for f = 0 :frame_interval : frames
     %x
@@ -143,16 +143,16 @@ for f = 0 :frame_interval : frames
     hold on
     plotCircle(animation.centers.x, animation.radiuses.x, 'r');
     plotCircle(animation.centers.y, animation.radiuses.y, 'g');
-    plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'm', 5)
-    plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'm', 5)
-    scatter(xs(1:(f/frame_interval)+1), ys(1:(f/frame_interval)+1));
+    plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 2)
+    plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 2)
+    scatter(xs(1:(f/frame_interval)+1), ys(1:(f/frame_interval)+1), 'MarkerFaceColor', 'flat');
 
     % plotLine(animation.centers.x', animation.next_centers.x', 'black', 2);
     % plotLine(animation.centers.y', animation.next_centers.y', 'black', 2);
 
     axis equal
-    xlim([picture.min.x, picture.max.x] + [animation.center_offset.y(1), animation.center_offset.x(1)] + [-0.1, 0.1])
-    ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), animation.center_offset.x(2)] + [-0.1, 0.1])
+    xlim([picture.min.x, picture.max.x] + [0, animation.center_offset.x(1)] + [-0.1, 0.1])
+    ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), 0] + [-0.1, 0.1])
  
     % if rem(f, 10) == 0
         drawnow limitrate
