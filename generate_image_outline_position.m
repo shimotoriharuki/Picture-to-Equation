@@ -83,7 +83,7 @@ cy = (min(position(2, :)) + max(position(2, :)))/2;
 position(1, :) = position(1, :) - cx;
 position(2, :) = position(2, :) - cy;
 
-position(:, end+1) = [0; 0]; % あとで消す
+% position(:, end+1) = [0; 0]; % あとで消す
 
 figure(3)
 scatter(position(1, :), position(2, :))

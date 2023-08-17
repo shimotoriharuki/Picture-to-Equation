@@ -84,7 +84,7 @@ circle_num = length(equation.F.x);
 % circle_num = 3;
 
 frames = length(equation.F.x);
-frame_interval = 10; % odd
+frame_interval = 1; % odd
 xs = zeros(1, frames/frame_interval);
 ys = zeros(1, frames/frame_interval);
 
