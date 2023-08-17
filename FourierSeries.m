@@ -1,12 +1,12 @@
 clear
 % 時刻tで変化する任意のデータ
-% data = load('cat_data.mat');
-% data.size = length(data.position);
-
-tt = 0 : 0.1 : 2*pi;
-data.position(1, :) = sin(tt);
-data.position(2, :) = 2*sin(2*tt + pi/6);
+data = load('cat_data.mat');
 data.size = length(data.position);
+
+% tt = 0 : 0.1 : 2*pi;
+% data.position(1, :) = sin(tt);
+% data.position(2, :) = 2*sin(2*tt + pi/6);
+% data.size = length(data.position);
 
 picture.position.x = data.position(1, 1:data.size); 
 picture.position.y = data.position(2, 1:data.size); 
@@ -35,27 +35,28 @@ end
 equation.position.x = real(equation.position.x/N);
 equation.position.y = real(equation.position.y/N);
 
-figure(1)
-subplot(2, 1, 1)
-plot(t, picture.position.x, 'LineWidth', 10)
-hold on
-plot(t, equation.position.x, 'LineWidth', 3)
-hold off
-legend("Picture position", "Equation position")
-title("X position")
-
-subplot(2, 1, 2)
-plot(t, picture.position.y, 'LineWidth', 10)
-hold on
-plot(t, equation.position.y, 'LineWidth', 3)
-hold off
-legend("Picture position", "Equation position")
-title("Y position")
+% figure(1)
+% subplot(2, 1, 1)
+% plot(t, picture.position.x, 'LineWidth', 10)
+% hold on
+% plot(t, equation.position.x, 'LineWidth', 3)
+% hold off
+% legend("Picture position", "Equation position")
+% title("X position")
+% 
+% subplot(2, 1, 2)
+% plot(t, picture.position.y, 'LineWidth', 10)
+% hold on
+% plot(t, equation.position.y, 'LineWidth', 3)
+% hold off
+% legend("Picture position", "Equation position")
+% title("Y position")
 
 figure(2)
 scatter(picture.position.x, picture.position.y, "*")
 hold on
 scatter(equation.position.x, equation.position.y, "o")
+axis equal
 hold off
 legend("Picture position", "Equation position")
 
