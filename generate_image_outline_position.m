@@ -2,8 +2,8 @@ clear
 clf
 % 画像をインポート
 % I = imread('image/THE NOM FACE.jpg');
-% I = imread('image/reRo.jpg');
-I = imread('image/SH.png');
+I = imread('image/reRo.jpg');
+% I = imread('image/SH.png');
 
 I = flipud(I);
 
@@ -86,8 +86,16 @@ cy = (min(position_raw(2, :)) + max(position_raw(2, :)))/2;
 position_raw(1, :) = position_raw(1, :) - cx;
 position_raw(2, :) = position_raw(2, :) - cy;
 
-position(1, :) = downsample(position_raw(1, :), 10);
-position(2, :) = downsample(position_raw(2, :), 10);
+% 間引く
+% position(1, :) = downsample(position_raw(1, :), 10);
+% position(2, :) = downsample(position_raw(2, :), 10);
+
+% 最終的な要素数を指定
+final_num_elements = 1000;
+
+% 配列の要素数を指定の要素数にする
+position(1, :) = position_raw(1, round(linspace(1, length(position_raw(1, :)), final_num_elements)));
+position(2, :) = position_raw(2, round(linspace(1, length(position_raw(2, :)), final_num_elements)));
 
 % position_raw(:, end+1) = [0; 0]; % あとで消す
 

@@ -3,6 +3,8 @@ clf
 % 時刻tで変化する任意のデータ
 data = load('sh.mat');
 data.size = length(data.position);
+data2 = load('rero.mat');
+data2.size = length(data2.position);
 
 % リサージュ
 % tt = 0 : 0.001 : 2*pi;
@@ -20,8 +22,8 @@ data.size = length(data.position);
 % data.position(2, :) = 2*sin(2*tt + pi/6)+3*sin(5*tt + pi/2);
 % data.size = length(data.position);
 
-picture.position.x = data.position(1, :); 
-picture.position.y = data.position(2, :); 
+picture.position.x = data.position(1, :) + data2.position(1, 1:data.size)*1i; 
+picture.position.y = data.position(2, :) + data2.position(2, 1:data.size)*1i; 
 
 picture.max.x = max(picture.position.x);
 picture.min.x = min(picture.position.x);
@@ -50,11 +52,16 @@ equation.position.x = real(equation.position.x/N);
 equation.position.y = real(equation.position.y/N);
 
 figure(2)
-scatter(picture.position.x, picture.position.y, 12, "o", 'MarkerFaceColor', 'flat')
-hold on
-% scatter(equation.position.x, equation.position.y, "*")
+% hold on
+subplot(2, 1, 1)
+scatter(real(picture.position.x), real(picture.position.y), 12, "o", 'MarkerFaceColor', 'flat')
 axis equal
-hold off
+
+subplot(2, 1, 2)
+scatter(imag(picture.position.x), imag(picture.position.y), 12, "o", 'MarkerFaceColor', 'flat')
+% hold off
+axis equal
+
 legend("Picture position")
 % パラメータ
 N = length(equation.F.x);
@@ -87,6 +94,8 @@ frames = length(equation.F.x);
 frame_interval = 1; % odd
 xs = zeros(1, frames/frame_interval);
 ys = zeros(1, frames/frame_interval);
+xs2 = zeros(1, frames/frame_interval);
+ys2 = zeros(1, frames/frame_interval);
 
 M(frames) = struct('cdata',[],'colormap',[]);
 
@@ -138,21 +147,29 @@ for f = 0 :frame_interval : frames
     if rem(f, frame_interval) == 0
         xs((f/frame_interval)+1) = animation.centers.x(end, 1);
         ys((f/frame_interval)+1) = animation.centers.y(end, 2);
+        xs2((f/frame_interval)+1) = animation.centers.y(end, 1);
+        ys2((f/frame_interval)+1) = animation.centers.x(end, 2);
     end
 
     hold on
-    plotCircle(animation.centers.x, animation.radiuses.x, 'r');
-    plotCircle(animation.centers.y, animation.radiuses.y, 'g');
+    plotCircle(animation.centers.x, animation.radiuses.x, 'r', 1);
+    plotCircle(animation.centers.y, animation.radiuses.y, 'g', 1);
+    %real
     plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 2)
     plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 2)
     scatter(xs(1:(f/frame_interval)+1), ys(1:(f/frame_interval)+1), 'MarkerFaceColor', 'flat');
-
+    
+    %imag
+    plotLine(animation.centers.x(end, :)', [animation.centers.y(end, 1); animation.centers.x(end, 2)], 'black', 2)
+    plotLine(animation.centers.y(end, :)', [animation.centers.y(end, 1); animation.centers.x(end, 2)], 'black', 2)
+    scatter(xs2(1:(f/frame_interval)+1), ys2(1:(f/frame_interval)+1), 'MarkerFaceColor', 'flat');
+    
     % plotLine(animation.centers.x', animation.next_centers.x', 'black', 2);
     % plotLine(animation.centers.y', animation.next_centers.y', 'black', 2);
 
     axis equal
-    xlim([picture.min.x, picture.max.x] + [0, animation.center_offset.x(1)] + [-0.2, 0.2])
-    ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), 0] + [-0.2, 0.2])
+    % xlim([picture.min.x, picture.max.x] + [0, animation.center_offset.x(1)] + [-0.2, 0.2])
+    % ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), 0] + [-0.2, 0.2])
 
     % if rem(f, 10) == 0
         drawnow limitrate
@@ -165,11 +182,13 @@ end
 % hold on 
 % scatter(xs, ys);
 % hold off
+
+
 M(end+1) = getframe;
 
 
-function plotCircle(centers, radiuses, color)
-    viscircles(centers, radiuses, 'Color', color);
+function plotCircle(centers, radiuses, color, line_width)
+    viscircles(centers, radiuses, 'LineWidth', line_width, 'Color', color);
     % rectangle('Position',[center - radius, radius * 2, radius * 2], 'Curvature', [1, 1]);
 end
 
