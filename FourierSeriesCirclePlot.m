@@ -1,11 +1,17 @@
 clear
 clf
 % 時刻tで変化する任意のデータ
-data = load('sh.mat');
+data = load('reRo.mat');
 data.size = length(data.position);
-data2 = load('rero.mat');
+data2 = load('THE_NOM_FACE.mat');
 data2.size = length(data2.position);
 
+%data2だけ-90°回転
+theta = pi/2;
+R = [cos(theta), -sin(theta); sin(theta), cos(theta)];
+for i = 1:data2.size
+    data2.position(:, i) = -R * data2.position(:, i);
+end
 % リサージュ
 % tt = 0 : 0.001 : 2*pi;
 % data.position(1, :) = sin(tt);
@@ -22,13 +28,14 @@ data2.size = length(data2.position);
 % data.position(2, :) = 2*sin(2*tt + pi/6)+3*sin(5*tt + pi/2);
 % data.size = length(data.position);
 
+%絵を実部と虚部に分けて格納
 picture.position.x = data.position(1, :) + data2.position(1, 1:data.size)*1i; 
 picture.position.y = data.position(2, :) + data2.position(2, 1:data.size)*1i; 
 
-picture.max.x = max(picture.position.x);
-picture.min.x = min(picture.position.x);
-picture.max.y = max(picture.position.y);
-picture.min.y = min(picture.position.y);
+picture.max.x = max(real(picture.position.x));
+picture.min.x = min(imag(picture.position.x));
+picture.max.y = max(imag(picture.position.y));
+picture.min.y = min(real(picture.position.y));
 
 % フーリエ変換
 equation.F.x = fft(picture.position.x) / length(picture.position.x);
@@ -99,8 +106,8 @@ ys2 = zeros(1, frames/frame_interval);
 
 M(frames) = struct('cdata',[],'colormap',[]);
 
-animation.center_offset.x = [0.5, 0.5];
-animation.center_offset.y = [-1, -0.5];
+animation.center_offset.x = [1, 1];
+animation.center_offset.y = [-1, -1];
 
 for f = 0 :frame_interval : frames
     %x
@@ -155,14 +162,14 @@ for f = 0 :frame_interval : frames
     plotCircle(animation.centers.x, animation.radiuses.x, 'r', 1);
     plotCircle(animation.centers.y, animation.radiuses.y, 'g', 1);
     %real
-    plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 2)
-    plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 2)
-    scatter(xs(1:(f/frame_interval)+1), ys(1:(f/frame_interval)+1), 'MarkerFaceColor', 'flat');
+    scatter(xs(1:(f/frame_interval)+1), ys(1:(f/frame_interval)+1), 10, 'MarkerFaceColor', 'flat');
+    plotLine(animation.centers.x(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 1)
+    plotLine(animation.centers.y(end, :)', [animation.centers.x(end, 1); animation.centers.y(end, 2)], 'black', 1)
     
     %imag
-    plotLine(animation.centers.x(end, :)', [animation.centers.y(end, 1); animation.centers.x(end, 2)], 'black', 2)
-    plotLine(animation.centers.y(end, :)', [animation.centers.y(end, 1); animation.centers.x(end, 2)], 'black', 2)
-    scatter(xs2(1:(f/frame_interval)+1), ys2(1:(f/frame_interval)+1), 'MarkerFaceColor', 'flat');
+    scatter(xs2(1:(f/frame_interval)+1), ys2(1:(f/frame_interval)+1), 10, 'MarkerFaceColor', 'flat');
+    plotLine(animation.centers.x(end, :)', [animation.centers.y(end, 1); animation.centers.x(end, 2)], 'black', 1)
+    plotLine(animation.centers.y(end, :)', [animation.centers.y(end, 1); animation.centers.x(end, 2)], 'black', 1)
     
     % plotLine(animation.centers.x', animation.next_centers.x', 'black', 2);
     % plotLine(animation.centers.y', animation.next_centers.y', 'black', 2);
@@ -170,6 +177,8 @@ for f = 0 :frame_interval : frames
     axis equal
     % xlim([picture.min.x, picture.max.x] + [0, animation.center_offset.x(1)] + [-0.2, 0.2])
     % ylim([picture.min.y, picture.max.y] + [animation.center_offset.y(2), 0] + [-0.2, 0.2])
+    xlim([-2.25, 2.25])
+    ylim([-1.75, 1.75])
 
     % if rem(f, 10) == 0
         drawnow limitrate

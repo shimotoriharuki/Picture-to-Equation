@@ -1,8 +1,13 @@
 clear
 clf
 % 画像をインポート
+% file_name = 'SH.png';
+% file_name = 'reRo.jpg';
+file_name = 'THE_NOM_FACE.jpg';
+
+path = append('image/', file_name);
 % I = imread('image/THE NOM FACE.jpg');
-I = imread('image/reRo.jpg');
+I = imread(path);
 % I = imread('image/SH.png');
 
 I = flipud(I);
@@ -91,7 +96,7 @@ position_raw(2, :) = position_raw(2, :) - cy;
 % position(2, :) = downsample(position_raw(2, :), 10);
 
 % 最終的な要素数を指定
-final_num_elements = 1000;
+final_num_elements = 4000;
 
 % 配列の要素数を指定の要素数にする
 position(1, :) = position_raw(1, round(linspace(1, length(position_raw(1, :)), final_num_elements)));
@@ -102,4 +107,5 @@ position(2, :) = position_raw(2, round(linspace(1, length(position_raw(2, :)), f
 figure(3)
 scatter(position(1, :), position(2, :))
 
-save('sh', "position")
+[~, save_file_name, ~] = fileparts(file_name);
+save(save_file_name, "position")
